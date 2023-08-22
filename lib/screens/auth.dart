@@ -111,7 +111,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     return null;
                                   },
                                   onSaved: (newValue) {
-                                    _enteredEmail = newValue!;
+                                    _enteredPassword = newValue!;
                                   },
                                 ),
                                 const SizedBox(
