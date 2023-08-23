@@ -20,6 +20,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   bool _isLogin = true;
   String _enteredEmail = '';
+  String _enterUserName = '';
   String _enteredPassword = '';
   File? _selectImage;
 
@@ -72,7 +73,7 @@ class _AuthScreenState extends State<AuthScreen> {
             .collection('users')
             .doc(userCredential.user!.uid)
             .set({
-          'username': 'abcxyz',
+          'username': _enterUserName,
           'email': _enteredEmail,
           'image_url': imageUrl,
         });
@@ -90,11 +91,10 @@ class _AuthScreenState extends State<AuthScreen> {
           ),
         );
       }
+      setState(() {
+        _isAuthenticating = false;
+      });
     }
-
-    setState(() {
-      _isAuthenticating = false;
-    });
   }
 
   @override
@@ -150,6 +150,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                   },
                                 ),
                               TextFormField(
+                                key: const ValueKey('Email address'),
                                 decoration: InputDecoration(
                                   labelText: 'Email address',
                                   border: OutlineInputBorder(
@@ -174,6 +175,32 @@ class _AuthScreenState extends State<AuthScreen> {
                               const SizedBox(
                                 height: 12,
                               ),
+                              if (!_isLogin)
+                                TextFormField(
+                                  key: const ValueKey('Username'),
+                                  decoration: InputDecoration(
+                                    labelText: 'Username',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  enableSuggestions: false,
+                                  validator: (value) {
+                                    if (value == null ||
+                                        value.isEmpty ||
+                                        value.trim().length < 4) {
+                                      return 'Please enter at least 4 characters';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (newValue) {
+                                    _enterUserName = newValue!;
+                                  },
+                                ),
+                              if (!_isLogin)
+                                const SizedBox(
+                                  height: 12,
+                                ),
                               TextFormField(
                                 decoration: InputDecoration(
                                   labelText: 'Password',
